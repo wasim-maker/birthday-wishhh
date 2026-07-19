@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, Jan G! ❤️</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffe5ec; /* Fallback */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Lock scroll to control experience */
+            color: #4a5568;
+        }
+
+        /* --- BACKGROUND IMAGE LAYER --- */
+        #bg-image-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('IMG_7514.jpg'); /* The specified background image */
+            background-size: cover;
+            background-position: center;
+            z-index: 1; /* Lowest visible layer */
+            opacity: 0.8; /* Subtle blend */
+        }
+
+        /* --- GENTLE AESTHETIC BLUR OVERLAY (Over BG, under card) --- */
+        #aesthetic-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 229, 236, 0.7) 0%, rgba(255, 194, 209, 0.6) 100%);
+            backdrop-filter: blur(8px); /* The nice glass effect from before */
+            z-index: 2;
+        }
+
+        /* --- PRE-LOAD / EMOTIONAL ENTRANCE SCREEN --- */
+        #pre-load-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9); /* Dark suspenseful background */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100; /* Highest layer initially */
+            color: white;
+            transition: opacity 1s ease-out;
+        }
+        #name-reveal-title {
+            font-size: 3rem;
+            color: #fb7185;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(251, 113, 133, 0.8);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        #unlock-button {
+            background: #e11d48;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(225, 29, 72, 0.3);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        #unlock-button:hover {
+            background: #f43f5e;
+            transform: translateY(-3px);
+        }
+
+        /* --- 10-SECOND SURPRISE TIMER (Inside pre-load screen) --- */
+        #surprise-timer-container {
+            display: none; /* Initially hidden */
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        #surprise-count {
+            font-size: 8rem;
+            font-weight: bold;
+            color: #e11d48;
+            text-shadow: 0 0 20px rgba(225, 29, 72, 0.7);
+        }
+        #surprise-text {
+            color: #fda4af;
+            font-size: 1.3rem;
+            font-style: italic;
+        }
+
+        /* --- MAIN BIRTHDAY CARD (Initially Hidden) --- */
+        .card-container {
+            position: relative;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(5px);
+            border-radius: 20px;
+            padding: 40px 30px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(225, 29, 72, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            z-index: 10;
+            opacity: 0; /* Hidden initially */
+            transform: translateY(20px);
+            transition: opacity 1.5s ease-out, transform 1s ease-out;
+        }
+        .reveal-card { /* Trigger class for JavaScript */
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        h1 {
+            color: #fb7185;
+            font-size: 2.8rem;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+        .pyaara-naam {
+            font-size: 1.8rem;
+            color: #e11d48;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .subtitle {
+            font-style: italic;
+            color: #f43f5e;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+        }
+        .message-box {
+            background: rgba(255, 255, 255, 0.6);
+            padding: 25px 20px;
+            border-radius: 15px;
+            border-left: 5px solid #fda4af;
+            text-align: left;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+        }
+        .message-box p {
+            margin-bottom: 10px;
+        }
+        .b-signature {
+            text-align: right;
+            font-weight: bold;
+            color: #e11d48;
+            margin-top: 15px;
+            display: block;
+        }
+
+        /* Heart Animation Effect (unchanged) */
+        .heart {
+            position: absolute;
+            background-color: #f43f5e;
+            display: inline-block;
+            height: 20px;
+            margin: 0 10px;
+            position: absolute;
+            transform: rotate(-45deg);
+            width: 20px;
+            bottom: -50px;
+            animation: floatUp 6s linear infinite;
+            opacity: 0.6;
+            z-index: 3; /* Over background, under card */
+        }
+        .heart:before, .heart:after {
+            content: "";
+            background-color: #f43f5e;
+            border-radius: 50%;
+            height: 20px;
+            position: absolute;
+            width: 20px;
+        }
+        .heart:before { top: -10px; left: 0; }
+        .heart:after { left: 10px; top: 0; }
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(-45deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-105vh) rotate(-45deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Image Layer -->
+    <div id="bg-image-layer"></div>
+    
+    <!-- Aesthetic Blur Overlay -->
+    <div id="aesthetic-overlay"></div>
+
+    <!-- PRE-LOAD / ENTRANCE SCREEN -->
+    <div id="pre-load-screen">
+        <h2 id="name-reveal-title">❤️ <span class="reveal-name">jan g</span> ❤️</h2>
+        <button id="unlock-button">Open Your Surprise</button>
+        
+        <!-- The 10-Second Countdown (hidden until button click) -->
+        <div id="surprise-timer-container">
+            <div id="surprise-text">Just 10 seconds, and it's all for you...</div>
+            <div id="surprise-count">10</div>
+        </div>
+    </div>
+
+    <!-- MAIN BIRTHDAY CARD (Hidden initially) -->
+    <div class="card-container" id="main-card">
+        <h1>Happy Birthday! 🎂</h1>
+        <div class="pyaara-naam">jan g</div>
+        <div class="subtitle">My Everything, Always. ❤️</div>
+        
+        <div class="message-box">
+            <p>Janam diN mubarkk meri jan k totayy🥺❤️</p>
+            <p>Allah pak apko hmesha hasta muskurata rkhy meri jaan you know is bar halat thory tight h but hmesha ni rehnyy so please accept my this little effort and i know tm is bar excited b nahi ho soo i have to tryy once again</p>
+            <p>happy birthday meri jan</p>
+            <span class="b-signature">— Yours Forever</span>
+        </div>
+    </div>
+
+    <script>
+        const preLoadScreen = document.getElementById('pre-load-screen');
+        const unlockBtn = document.getElementById('unlock-button');
+        const nameTitle = document.getElementById('name-reveal-title');
+        const mainCard = document.getElementById('main-card');
+        const timerContainer = document.getElementById('surprise-timer-container');
+        const surpriseCount = document.getElementById('surprise-count');
+
+        // Logic for the Unlock and 10-second timer
+        unlockBtn.addEventListener('click', function() {
+            // Hide initial button and title
+            unlockBtn.style.display = 'none';
+            nameTitle.style.display = 'none';
+            
+            // Show the countdown
+            timerContainer.style.display = 'flex';
+            setTimeout(() => timerContainer.style.opacity = '1', 50); // Small delay for transition
+
+            let secondsLeft = 10;
+            
+            const surpriseInterval = setInterval(function() {
+                secondsLeft--;
+                surpriseCount.innerText = secondsLeft;
+
+                if (secondsLeft <= 0) {
+                    clearInterval(surpriseInterval);
+                    
+                    // Fade out the dark pre-load screen
+                    preLoadScreen.style.opacity = '0';
+                    
+                    // Reveal the main card after the screen is gone
+                    setTimeout(() => {
+                        preLoadScreen.style.display = 'none'; // Completely remove
+                        mainCard.classList.add('reveal-card'); // Show card
+                        document.body.style.overflow = 'auto'; // Re-enable scroll
+                    }, 1000); 
+                }
+            }, 1000); // 1-second interval
+        });
+
+        // Falling Hearts Generator (Unchanged)
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = Math.random() * 3 + 3 + "s";
+            heart.style.size = Math.random() * 10 + 10 + "px";
+            
+            // Randomize size slightly
+            const size = Math.random() * 10 + 15;
+            heart.style.width = `${size}px`;
+            heart.style.height = `${size}px`;
+            
+            document.body.appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 6000);
+        }
+        setInterval(createHeart, 400); // Slower generation for a cleaner look with image
+    </script>
+</body>
+</html>
